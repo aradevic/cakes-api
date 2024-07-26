@@ -13,22 +13,25 @@ import (
 )
 
 type Service struct {
-	D repo.DatabaseRepo
+	d repo.DatabaseRepo
+}
+
+func NewService(d repo.DatabaseRepo) Service {
+	return Service{d: d}
 }
 
 func (s *Service) GetCakes(w http.ResponseWriter, r *http.Request) {
 	q := r.URL.Query()
 	if len(q) > 0 {
-		fmt.Fprintln(w, s.D.FindCakes(q))
+		fmt.Fprintln(w, s.d.FindCakes(q))
 	} else {
-		fmt.Fprintln(w, s.D.GetCakes())
+		fmt.Fprintln(w, s.d.GetCakes())
 	}
 }
 
 func (s *Service) AddCake(w http.ResponseWriter, r *http.Request) {
-
 	cake := parseJSON(r)
-	s.D.AddCake(cake)
+	s.d.AddCake(cake)
 }
 
 func (s *Service) DeleteCakes(w http.ResponseWriter, r *http.Request) {
@@ -37,7 +40,7 @@ func (s *Service) DeleteCakes(w http.ResponseWriter, r *http.Request) {
 		panic(err)
 	}
 
-	s.D.DeleteById(id)
+	s.d.DeleteById(id)
 }
 
 func (s *Service) FindCakesById(w http.ResponseWriter, r *http.Request) {
@@ -46,7 +49,7 @@ func (s *Service) FindCakesById(w http.ResponseWriter, r *http.Request) {
 		panic(err)
 	}
 
-	fmt.Fprintln(w, s.D.FindById(id))
+	fmt.Fprintln(w, s.d.FindById(id))
 }
 
 func parseJSON(r *http.Request) model.Cake {

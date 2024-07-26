@@ -7,6 +7,8 @@ import (
 
 	"alexco.waracle.com/cakes/api"
 	"alexco.waracle.com/cakes/repo"
+
+	_ "github.com/jackc/pgx/v4/stdlib"
 )
 
 var s api.Service
@@ -24,10 +26,7 @@ func init() {
 	}
 	fmt.Println("Connected to Db!")
 
-	s = api.Service{
-		D: &repo.PostresDBRepo{Db: db},
-	}
-
+	s = api.NewService(&repo.PostresDBRepo{Db: db})
 }
 
 func main() {
